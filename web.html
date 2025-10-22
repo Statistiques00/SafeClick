@@ -1,12 +1,253 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SafeClick — Cybersécurité pour tous</title>
+  <meta name="description" content="SafeClick — prévention à la cybersécurité pour seniors et jeunes. Conseils, quiz, guides et ressources.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Palette SafeClick inspirée : bleu profond, violet, accents cyan */
+    :root{
+      --bg:#0f1724; --panel:#0b1220; --card:#0f1b2b; --muted:#9fb0c8; --accent:#6ad7ff; --accent-2:#7c5cff; --glass:rgba(255,255,255,0.04);
+      --radius:16px; --maxw:1100px;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:radial-gradient(1200px 600px at 10% 10%, rgba(124,92,255,0.16), transparent 8%), radial-gradient(900px 500px at 90% 90%, rgba(106,215,255,0.08), transparent 12%), var(--bg); color: #e6f0fb; -webkit-font-smoothing:antialiased; padding:28px; display:flex; justify-content:center}
+    .site{width:100%;max-width:var(--maxw)}
+
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#071428;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 8px 30px rgba(124,92,255,0.12)}
+    h1{font-size:18px;margin:0}
+    .tag{font-size:13px;color:var(--muted)}
+
+    nav{display:flex;gap:10px}
+    .nav-link{background:transparent;border:0;padding:8px 12px;border-radius:12px;color:var(--muted);cursor:pointer}
+    .nav-link.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071428;font-weight:700}
+
+    main{margin-top:20px;display:grid;grid-template-columns:1fr 360px;gap:20px}
+    @media (max-width:980px){main{grid-template-columns:1fr} .aside{order:2}}
+
+    .hero{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-radius:var(--radius); padding:28px; display:flex; gap:20px; align-items:center}
+    .hero-left{flex:1}
+    .kicker{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,var(--accent-2),var(--accent));color:#071428;font-weight:700;font-size:13px}
+    h2{margin:12px 0 8px;font-size:28px}
+    p.lead{margin:0;color:var(--muted);max-width:58ch}
+    .hero-cta{margin-top:16px;display:flex;gap:12px;flex-wrap:wrap}
+    .btn{padding:12px 16px;border-radius:12px;border:0;cursor:pointer;font-weight:700}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071428}
+    .btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+
+    .hero-visual{width:320px;height:200px;border-radius:12px;background:linear-gradient(135deg,rgba(122,83,255,0.14),rgba(106,215,255,0.08));display:flex;align-items:center;justify-content:center;box-shadow:0 12px 40px rgba(7,20,40,0.6)}
+    .hero-visual img{max-width:92%;height:auto;border-radius:8px}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-radius:12px;padding:16px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+    .feature{display:flex;gap:12px;align-items:flex-start}
+    .icon{width:44px;height:44;border-radius:10px;background:var(--glass);display:flex;align-items:center;justify-content:center;color:var(--accent-2);font-weight:800}
+
+    .small{font-size:14px;color:var(--muted)}
+
+    /* Aside */
+    .aside .card{margin-bottom:14px}
+
+    /* Quiz */
+    .quiz .question{margin-bottom:12px}
+    .options button{display:block;width:100%;text-align:left;margin:8px 0;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;cursor:pointer}
+    .options button.correct{outline:3px solid rgba(54,224,155,0.18)}
+    .options button.wrong{outline:3px solid rgba(255,90,90,0.12)}
+
+    /* Modal */
+    #modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:24px;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.85));}
+    #modal .dialog{max-width:720px;width:100%;}
+
+    footer{margin-top:20px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* micro animations */
+    .fade-in{animation:fadeIn .6s ease both}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+    /* Responsive tweaks */
+    @media (max-width:480px){ .hero{flex-direction:column} .hero-visual{width:100%;height:180px} }
+  </style>
 </head>
 <body>
-    <p> j'aime les bites</p>
-    
+  <div class="site">
+    <header>
+      <div class="brand">
+        <div class="logo">SC</div>
+        <div>
+          <h1>SafeClick</h1>
+          <div class="tag">Prévention & sensibilisation — Seniors • Jeunes</div>
+        </div>
+      </div>
+      <nav>
+        <button class="nav-link">Accueil</button>
+        <button class="nav-link">Guides</button>
+        <button class="nav-link">Quiz</button>
+        <button class="nav-link primary">Télécharger le guide</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero card fade-in" aria-labelledby="hero-title">
+        <div class="hero-left">
+          <span class="kicker">Nouveau</span>
+          <h2 id="hero-title">Protégez vos proches — guide simple et visuel</h2>
+          <p class="lead">SafeClick explique, étape par étape, comment repérer les arnaques, créer des mots de passe robustes, et naviguer sur les réseaux sociaux en toute sécurité. Design pensé pour être lisible par tous.</p>
+
+          <div class="hero-cta">
+            <button class="btn btn-primary" id="startGuide">Commencer le guide</button>
+            <button class="btn btn-outline" id="takeQuiz">Faire le quiz</button>
+            <button class="btn btn-outline" id="downloadGuide">Télécharger PDF</button>
+          </div>
+
+          <div class="features">
+            <div class="feature">
+              <div class="icon">🔒</div>
+              <div>
+                <div style="font-weight:700">Mots de passe sécurisés</div>
+                <div class="small">Techniques simples pour mémoriser des phrases de passe.</div>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="icon">🕵️‍♀️</div>
+              <div>
+                <div style="font-weight:700">Repérer les arnaques</div>
+                <div class="small">Exemples concrets et signaux d'alerte faciles à retenir.</div>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="icon">👥</div>
+              <div>
+                <div style="font-weight:700">Réseaux sociaux</div>
+                <div class="small">Paramètres de confidentialité expliqués pas à pas.</div>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="icon">📞</div>
+              <div>
+                <div style="font-weight:700">Assistance</div>
+                <div class="small">Numéros et ressources locales pour obtenir de l'aide.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <!-- Visual placeholder: in the real product replace with SVG/illustration from the maquette -->
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='380'><rect rx='12' width='100%' height='100%' fill='%230e1a2b'/><text x='50%' y='50%' fill='%236ad7ff' font-family='Inter, Arial' font-size='22' text-anchor='middle'>Maquette SafeClick</text></svg>" alt="Illustration SafeClick">
+        </div>
+      </section>
+
+      <aside class="aside">
+        <div class="card fade-in">
+          <h3>Quiz rapide</h3>
+          <p class="small">Testez vos réflexes en 2 minutes.</p>
+          <div id="quiz" class="quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="card fade-in">
+          <h3>Ressources</h3>
+          <ul class="small">
+            <li>Guide imprimable - version grand texte</li>
+            <li>Assistance locale : <strong>0123 456 789</strong></li>
+            <li><a href="#" style="color:var(--accent);text-decoration:none">Vérifier un e‑mail</a></li>
+          </ul>
+        </div>
+
+        <div class="card fade-in">
+          <h3>Contact</h3>
+          <form id="contactForm" onsubmit="submitContact(event)">
+            <label for="name">Nom</label><br>
+            <input id="name" name="name" class="input" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);margin-top:8px;background:transparent;color:inherit"><br><br>
+            <label for="email">E‑mail</label><br>
+            <input id="email" name="email" type="email" class="input" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);margin-top:8px;background:transparent;color:inherit"><br><br>
+            <button class="btn btn-primary" type="submit">Envoyer</button>
+          </form>
+        </div>
+      </aside>
+    </main>
+
+    <div id="modal" aria-hidden="true">
+      <div class="dialog card">
+        <button style="float:right;background:transparent;border:0;color:var(--muted);font-size:20px;cursor:pointer" onclick="closeModal()">✕</button>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2025 SafeClick — Conçu pour la prévention et l'éducation.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Comportements repris et améliorés : quiz, modal, téléchargements, accessibilité
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modalContent');
+
+    function openModal(html){
+      modalContent.innerHTML = html;
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
+    }
+    function closeModal(){ modal.style.display='none'; modal.setAttribute('aria-hidden','true'); }
+
+    document.getElementById('startGuide').addEventListener('click', ()=>{
+      openModal(`<h2>Guide SafeClick</h2><p class=\"small\">Bienvenue dans le guide pas à pas. Ici nous expliquerons comment repérer une arnaque, protéger vos mots de passe et sécuriser vos comptes.</p>`);
+    });
+    document.getElementById('takeQuiz').addEventListener('click', ()=>{ document.getElementById('quiz').scrollIntoView({behavior:'smooth'}); });
+    document.getElementById('downloadGuide').addEventListener('click', ()=>{ downloadPDF(); });
+
+    // Simple quiz data
+    const quizData = [
+      {q: 'Si une personne se présente comme votre banque et vous demande votre code, que faire ?', a:['Le donner','Ne pas le donner et appeler la banque'], correct:1, explain:'Votre banque ne demande jamais les codes.'},
+      {q: 'Avant de cliquer sur un lien reçu par e‑mail, que faut‑il vérifier ?', a:['L\'adresse du lien','La longueur du message'], correct:0, explain:'Survolez le lien et vérifiez l\'URL.'},
+      {q: 'Partagez‑vous votre mot de passe avec vos proches ?', a:['Oui, si on me le demande','Non, jamais'], correct:1, explain:'Un mot de passe est personnel.'}
+    ];
+
+    function renderQuiz(){
+      const container = document.getElementById('quiz');
+      container.innerHTML='';
+      quizData.forEach((item, idx)=>{
+        const div = document.createElement('div'); div.className='card small'; div.style.marginBottom='10px';
+        const q = document.createElement('div'); q.className='question'; q.innerHTML = `<strong>Q${idx+1}.</strong> ${item.q}`;
+        div.appendChild(q);
+        const opts = document.createElement('div'); opts.className='options';
+        item.a.forEach((opt,i)=>{
+          const btn = document.createElement('button'); btn.type='button'; btn.innerText = opt;
+          btn.addEventListener('click', ()=>{
+            Array.from(opts.children).forEach(b=>b.disabled=true);
+            if(i===item.correct){ btn.classList.add('correct'); alert('Bonne réponse!\n'+item.explain); }
+            else{ btn.classList.add('wrong'); alert('Mauvaise réponse.\n'+item.explain); }
+          });
+          opts.appendChild(btn);
+        });
+        div.appendChild(opts);
+        container.appendChild(div);
+      });
+    }
+    renderQuiz();
+
+    // Download a simple PDF-like blob (text) — placeholder for real PDF generation
+    function downloadPDF(){
+      const content = `SafeClick - Guide rapide\n\n1) Ne donnez jamais vos codes.\n2) Vérifiez les expéditeurs.\n3) Utilisez des mots de passe uniques.`;
+      const blob = new Blob([content], {type:'text/plain;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download='SafeClick_Guide.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    // Contact form simulation
+    function submitContact(e){ e.preventDefault(); const name=document.getElementById('name').value.trim(); const email=document.getElementById('email').value.trim(); if(!name||!email){ alert('Merci de remplir le nom et l\'e-mail.'); return;} alert('Merci '+name+' — message simulé envoyé.'); e.target.reset(); }
+
+    // close modal on escape
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+  </script>
 </body>
 </html>
