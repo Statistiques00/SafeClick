@@ -113,5 +113,16 @@ pnpm dev
 # Dans PowerShell, à la racine du projet :
 
 ```bash
+https://www.docker.com/products/docker-desktop/
+```
+
+```bash
+https://pnpm.io/fr/installation
+```
+
+## Installer Requis avant de lancer le script
+
+
+```bash
 powershell -ExecutionPolicy Bypass -File .\setup-and-run.ps1
 ```
