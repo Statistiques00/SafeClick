@@ -49,8 +49,7 @@ pnpm -v*
 ```bash
 https://git-scm.com/
 ```
-
-- Vérifier :
+Vérifier :
 
 ```bash
 git --version
