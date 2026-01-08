@@ -106,3 +106,12 @@ pnpm exec prisma migrate dev --name init
 ```bash
 pnpm dev
 ```
+
+
+### ▶️ Lancer le script
+
+# Dans PowerShell, à la racine du projet :
+
+```bash
+powershell -ExecutionPolicy Bypass -File .\setup-and-run.ps1
+```
