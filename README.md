@@ -23,15 +23,19 @@ Le projet fonctionne **entièrement en local**.
 ## ✅ Prérequis
 
 ### 1️⃣ Installer Node.js
+
 - Installer **Node.js LTS 20.x** depuis https://nodejs.org
 - Vérifier :
+
 ```bash
 node -v
 npm -v
 ```
 
 ### 2️⃣ Installer pnpm
-```npm install -g pnpm
+
+```bash
+npm install -g pnpm
 pnpm -v```
 - Vérifier :
 ```bash
@@ -39,18 +43,22 @@ pnpm -v*
 ```
 
 ### 3️⃣ Installer Git (recommandé)
-```
+
+```bash
 https://git-scm.com/
 ```
 
 - Vérifier :
 
+```bash
 git --version
+```
 
 ## 📦 Installation du projet
 
 ### 1️⃣ Cloner le dépôt
-```
+
+```bash
 git clone https://github.com/Statistiques00/SafeClick.git
 cd SafeClick
 ```
