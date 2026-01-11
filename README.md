@@ -42,7 +42,7 @@ pnpm -v
 - Vérifier :
 
 ```bash
-pnpm -v*
+pnpm -v
 ```
 
 ### 3️⃣ Installer Git (recommandé)
