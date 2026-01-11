@@ -1,33 +1,50 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+
 import { prisma } from "@/lib/prisma";
 
-const handler = NextAuth({
-  session: { strategy: "jwt" },
+export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     Credentials({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        password: { label: "Mot de passe", type: "password" },
       },
       async authorize(credentials) {
-        const email = credentials?.email?.toLowerCase();
-        const password = credentials?.password;
+        if (!credentials?.email || !credentials.password) {
+          return null;
+        }
 
-        if (!email || !password) return null;
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email.toLowerCase() },
+        });
 
-        const user = await prisma.user.findUnique({ where: { email } });
         if (!user) return null;
 
-        const ok = await bcrypt.compare(password, user.password);
-        if (!ok) return null;
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
 
-        return { id: user.id, email: user.email };
+        if (!isValid) return null;
+
+        return {
+          id: user.id,
+          email: user.email,
+        };
       },
     }),
   ],
-});
+  pages: {
+    signIn: "/login",
+  },
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

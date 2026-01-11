@@ -4,100 +4,161 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 
-const links = [
-  { href: "/", label: "Accueil" },
-  { href: "/categories", label: "Catégories" },
-  { href: "/apprendre", label: "Apprendre" },
-  { href: "/scenarios", label: "Scénarios" },
+const navItems = [
+  { label: "Accueil", href: "/" },
+  { label: "Catégories", href: "/categories" },
+  { label: "Apprendre", href: "/learn" },
+  { label: "Scénarios", href: "/scenarios" },
 ];
 
-function NavLink({ href, label }: { href: string; label: string }) {
-  const pathname = usePathname();
-  const active =
-    pathname === href || (href !== "/" && pathname?.startsWith(href));
-
-  return (
-    <Link
-      href={href}
-      className={[
-        "rounded-full px-3 py-1.5 text-sm transition",
-        active
-          ? "text-zinc-900 bg-zinc-900/5"
-          : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-900/5",
-      ].join(" ")}
-    >
-      {label}
-    </Link>
-  );
-}
-
 export default function Navbar() {
+  const pathname = usePathname();
   const { data: session, status } = useSession();
 
+  const username =
+    session?.user?.name?.toString().trim() ||
+    session?.user?.email?.split("@")[0] ||
+    "";
+
+  const avatarLetter = username ? username[0]?.toUpperCase() : "U";
+
   return (
-    <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/70 backdrop-blur">
-      <div className="mx-auto max-w-6xl px-6 py-3 flex items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-2xl bg-zinc-900 text-white text-sm font-semibold">
-            SC
-          </span>
-          <span className="font-semibold tracking-tight">SafeClicks</span>
+    <header className="sticky top-0 z-30 border-b bg-white/80 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+        {/* Brand */}
+        <Link href="/" className="flex items-center gap-3">
+          <img
+            src="/safeclick_logo.svg"
+            alt="SafeClicks"
+            className="h-14 w-auto"
+          />
+          <span className="font-semibold text-slate-900">SafeClick</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-1">
-          {links.map((l) => (
-            <NavLink key={l.href} href={l.href} label={l.label} />
-          ))}
-          {status !== "loading" && session && (
-            <NavLink href="/dashboard" label="Dashboard" />
-          )}
+        {/* Center nav */}
+        <nav className="hidden items-center gap-2 md:flex">
+          {navItems.map((item) => {
+            const active =
+              item.href === "/"
+                ? pathname === "/"
+                : pathname?.startsWith(item.href);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={[
+                  "rounded-full px-4 py-2 text-sm font-medium",
+                  active
+                    ? "bg-slate-100 text-slate-900"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+                ].join(" ")}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="flex items-center gap-2">
+        {/* Right */}
+        <div className="flex items-center gap-3">
           {status === "loading" ? null : session ? (
             <>
+              {/* Profil (cliquable) */}
               <Link
                 href="/profil"
-                className="hidden sm:inline-flex rounded-full px-3 py-1.5 text-sm text-zinc-600 hover:text-zinc-900 hover:bg-zinc-900/5"
+                className="hidden sm:flex items-center gap-2 rounded-xl border bg-white px-3 py-2 transition hover:bg-slate-50 hover:shadow-sm"
+                title="Voir mon profil"
               >
-                {session.user?.email ?? "Profil"}
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-white">
+                  {avatarLetter}
+                </div>
+
+                <div className="leading-tight">
+                  <p className="text-sm font-semibold text-slate-900">
+                    {username}
+                  </p>
+                  <p className="text-xs text-slate-500">Voir mon profil</p>
+                </div>
               </Link>
+
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+                className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
               >
                 Déconnexion
               </button>
             </>
           ) : (
-            <>
+            <div className="flex items-center gap-2">
               <Link
                 href="/login"
-                className="rounded-full px-3 py-1.5 text-sm text-zinc-600 hover:text-zinc-900 hover:bg-zinc-900/5"
+                className="rounded-full px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
               >
                 Connexion
               </Link>
               <Link
                 href="/signup"
-                className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+                className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
               >
                 Inscription
               </Link>
-            </>
+            </div>
           )}
         </div>
       </div>
 
-      {/* mobile */}
-      <div className="md:hidden border-t border-zinc-200">
-        <div className="mx-auto max-w-6xl px-6 py-2 flex gap-2 overflow-x-auto">
-          {links.map((l) => (
-            <NavLink key={l.href} href={l.href} label={l.label} />
-          ))}
-          {status !== "loading" && session && (
-            <NavLink href="/dashboard" label="Dashboard" />
-          )}
-          <NavLink href="/profil" label="Profil" />
+      {/* Mobile nav */}
+      <div className="mx-auto block max-w-6xl px-4 pb-3 md:hidden">
+        <div className="mb-3">
+          {status === "loading" ? null : session ? (
+            <div className="flex items-center justify-between rounded-2xl border bg-white px-3 py-2">
+              {/* Profil mobile cliquable */}
+              <Link
+                href="/profil"
+                className="flex items-center gap-2 rounded-xl px-2 py-1 transition hover:bg-slate-50"
+                title="Voir mon profil"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-white">
+                  {avatarLetter}
+                </div>
+                <div className="leading-tight">
+                  <p className="text-sm font-semibold">{username}</p>
+                  <p className="text-xs text-slate-500">Voir mon profil</p>
+                </div>
+              </Link>
+
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="rounded-full bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:opacity-90"
+              >
+                Déconnexion
+              </button>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {navItems.map((item) => {
+            const active =
+              item.href === "/"
+                ? pathname === "/"
+                : pathname?.startsWith(item.href);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={[
+                  "rounded-full px-3 py-1.5 text-sm",
+                  active ? "bg-slate-100" : "bg-white hover:bg-slate-50",
+                  "border text-slate-700",
+                ].join(" ")}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </header>
