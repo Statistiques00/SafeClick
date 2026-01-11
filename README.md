@@ -36,7 +36,8 @@ npm -v
 
 ```bash
 npm install -g pnpm
-pnpm -v```
+pnpm -v
+```
 
 - Vérifier :
 

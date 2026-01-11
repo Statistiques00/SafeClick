@@ -7,10 +7,93 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Category {
+  EMAIL
+  SMS
+  SOCIAL
+}
+
 model User {
   id        String   @id @default(cuid())
   username  String   @unique
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+
+  attempts Attempt[]
+  badges   UserBadge[]
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  category    Category
+  prompt      String
+  explanation String
+  options     Option[]
+
+  answers Answer[] // ✅ AJOUTE ÇA
+}
+
+model Option {
+  id         String   @id @default(cuid())
+  label      String
+  isCorrect  Boolean  @default(false)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  answers Answer[] // ✅ AJOUTE ÇA
+}
+
+model Attempt {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  category  Category
+  score     Int      @default(0) // nb bonnes réponses
+  total     Int      @default(0) // nb questions
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  answers Answer[]
+
+  @@unique([userId, category]) // 1 progression par catégorie
+}
+
+model Answer {
+  id        String  @id @default(cuid())
+  attemptId String
+  attempt   Attempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  optionId String
+  option   Option @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  isCorrect Boolean
+  createdAt DateTime @default(now())
+
+  @@unique([attemptId, questionId]) // 1 réponse par question dans une catégorie
+}
+
+model Badge {
+  id   String @id @default(cuid())
+  code String @unique
+  name String
+  desc String
+
+  users UserBadge[] // ✅ AJOUTE ÇA
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId  String
+  badge    Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  earnedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
 }
