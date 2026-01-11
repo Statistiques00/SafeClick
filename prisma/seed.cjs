@@ -2,13 +2,13 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const QUESTIONS = [
-  /* ===================== EMAIL (15) ===================== */
+  /* ================= EMAIL (10) ================= */
   {
     category: "EMAIL",
     prompt: "Email : « Votre compte sera suspendu dans 1h ». Que fais-tu ?",
     explanation: "L’urgence est un signal classique de phishing.",
     options: [
-      { label: "Je clique sur le lien", isCorrect: false },
+      { label: "Je clique", isCorrect: false },
       { label: "Je vais sur le site officiel manuellement", isCorrect: true },
       { label: "Je réponds à l’email", isCorrect: false }
     ]
@@ -16,27 +16,27 @@ const QUESTIONS = [
   {
     category: "EMAIL",
     prompt: "Email avec une facture jointe alors que tu n’as rien commandé.",
-    explanation: "Les pièces jointes inattendues sont très risquées.",
+    explanation: "Les pièces jointes inattendues sont risquées.",
     options: [
-      { label: "Je l’ouvre pour vérifier", isCorrect: false },
+      { label: "Je l’ouvre", isCorrect: false },
       { label: "Je supprime sans ouvrir", isCorrect: true },
-      { label: "Je transfère à un collègue", isCorrect: false }
+      { label: "Je transfère", isCorrect: false }
     ]
   },
   {
     category: "EMAIL",
-    prompt: "L’adresse expéditeur est étrange (ex: support@amaz0n-secure.co).",
+    prompt: "Adresse expéditeur : support@amaz0n-secure.com",
     explanation: "Les faux domaines imitent les vrais.",
     options: [
-      { label: "C’est normal", isCorrect: false },
+      { label: "Normal", isCorrect: false },
       { label: "Je vérifie le domaine exact", isCorrect: true },
-      { label: "Je clique vite", isCorrect: false }
+      { label: "Je clique", isCorrect: false }
     ]
   },
   {
     category: "EMAIL",
-    prompt: "Email avec fautes d’orthographe et ton alarmiste.",
-    explanation: "Les fautes sont souvent un indice de phishing.",
+    prompt: "Email plein de fautes d’orthographe.",
+    explanation: "Les fautes sont souvent un signe d’arnaque.",
     options: [
       { label: "Ce n’est pas grave", isCorrect: false },
       { label: "Je me méfie", isCorrect: true },
@@ -45,40 +45,90 @@ const QUESTIONS = [
   },
   {
     category: "EMAIL",
-    prompt: "Email te demandant ton mot de passe.",
-    explanation: "Aucun service légitime ne demande ton mot de passe.",
+    prompt: "Email demandant ton mot de passe.",
+    explanation: "Aucun service légitime ne demande un mot de passe.",
     options: [
       { label: "Je le donne", isCorrect: false },
-      { label: "Je signale l’email", isCorrect: true },
-      { label: "Je clique sur le lien", isCorrect: false }
+      { label: "Je signale", isCorrect: true },
+      { label: "Je clique", isCorrect: false }
+    ]
+  },
+  {
+    category: "EMAIL",
+    prompt: "Email avec lien raccourci.",
+    explanation: "Les liens raccourcis masquent la destination.",
+    options: [
+      { label: "Je clique", isCorrect: false },
+      { label: "Je passe la souris pour vérifier", isCorrect: true },
+      { label: "Je partage", isCorrect: false }
+    ]
+  },
+  {
+    category: "EMAIL",
+    prompt: "Email de loterie inconnue.",
+    explanation: "Tu ne peux pas gagner sans participer.",
+    options: [
+      { label: "Je réponds", isCorrect: false },
+      { label: "Je supprime", isCorrect: true },
+      { label: "Je clique", isCorrect: false }
+    ]
+  },
+  {
+    category: "EMAIL",
+    prompt: "Email te demandant des infos personnelles.",
+    explanation: "Les infos sensibles ne sont jamais demandées par email.",
+    options: [
+      { label: "Je réponds", isCorrect: false },
+      { label: "Je refuse", isCorrect: true },
+      { label: "Je clique", isCorrect: false }
+    ]
+  },
+  {
+    category: "EMAIL",
+    prompt: "Email avec une signature étrange.",
+    explanation: "Une signature incohérente est suspecte.",
+    options: [
+      { label: "Normal", isCorrect: false },
+      { label: "Je vérifie l’identité", isCorrect: true },
+      { label: "Je clique", isCorrect: false }
+    ]
+  },
+  {
+    category: "EMAIL",
+    prompt: "Email pressant venant d’un « supérieur ».",
+    explanation: "Technique de fraude au président.",
+    options: [
+      { label: "J’obéis", isCorrect: false },
+      { label: "Je vérifie par un autre canal", isCorrect: true },
+      { label: "Je clique", isCorrect: false }
     ]
   },
 
-  /* ===================== SMS (15) ===================== */
+  /* ================= SMS (10) ================= */
   {
     category: "SMS",
-    prompt: "SMS : « Colis en attente, cliquez ici ». Tu n’attends rien.",
-    explanation: "Les faux SMS de livraison sont très fréquents.",
+    prompt: "SMS : « Colis en attente ». Tu n’attends rien.",
+    explanation: "Les faux SMS de livraison sont fréquents.",
     options: [
       { label: "Je clique", isCorrect: false },
-      { label: "Je supprime le SMS", isCorrect: true },
-      { label: "Je réponds STOP", isCorrect: false }
+      { label: "Je supprime", isCorrect: true },
+      { label: "Je réponds", isCorrect: false }
     ]
   },
   {
     category: "SMS",
-    prompt: "SMS de ta « banque » avec un lien.",
-    explanation: "Les banques ne communiquent pas ainsi.",
+    prompt: "SMS de ta banque avec un lien.",
+    explanation: "Les banques n’envoient pas de liens par SMS.",
     options: [
-      { label: "Je clique vite", isCorrect: false },
-      { label: "Je contacte ma banque via l’app officielle", isCorrect: true },
-      { label: "Je réponds au SMS", isCorrect: false }
+      { label: "Je clique", isCorrect: false },
+      { label: "Je contacte ma banque via l’app", isCorrect: true },
+      { label: "Je réponds", isCorrect: false }
     ]
   },
   {
     category: "SMS",
-    prompt: "SMS avec un lien raccourci (bit.ly).",
-    explanation: "Les liens raccourcis masquent la destination réelle.",
+    prompt: "Lien raccourci dans un SMS.",
+    explanation: "Lien raccourci = danger potentiel.",
     options: [
       { label: "Je clique", isCorrect: false },
       { label: "Je me méfie", isCorrect: true },
@@ -88,7 +138,7 @@ const QUESTIONS = [
   {
     category: "SMS",
     prompt: "SMS alarmiste demandant une action immédiate.",
-    explanation: "L’urgence est un signal d’arnaque.",
+    explanation: "L’urgence est un piège classique.",
     options: [
       { label: "Je panique", isCorrect: false },
       { label: "Je prends du recul", isCorrect: true },
@@ -97,40 +147,40 @@ const QUESTIONS = [
   },
   {
     category: "SMS",
-    prompt: "SMS te demandant un code reçu par SMS.",
-    explanation: "Ne jamais partager de code de sécurité.",
+    prompt: "SMS demandant un code de sécurité.",
+    explanation: "Un code est personnel.",
     options: [
       { label: "Je le donne", isCorrect: false },
       { label: "Je refuse", isCorrect: true },
-      { label: "Je renvoie le message", isCorrect: false }
+      { label: "Je réponds", isCorrect: false }
     ]
   },
 
-  /* ===================== RÉSEAUX SOCIAUX (15) ===================== */
+  /* ================= SOCIAL (10) ================= */
   {
     category: "SOCIAL",
-    prompt: "DM Instagram : « Tu as gagné un concours ». Tu n’as jamais participé.",
-    explanation: "Les faux concours sont très répandus.",
+    prompt: "DM : « Tu as gagné un concours ».",
+    explanation: "Faux concours très répandus.",
     options: [
-      { label: "Je clique sur le lien", isCorrect: false },
+      { label: "Je clique", isCorrect: false },
       { label: "Je bloque et signale", isCorrect: true },
-      { label: "Je réponds merci", isCorrect: false }
+      { label: "Je réponds", isCorrect: false }
     ]
   },
   {
     category: "SOCIAL",
-    prompt: "Un compte se fait passer pour un ami et te demande de l’argent.",
-    explanation: "C’est une usurpation d’identité.",
+    prompt: "Un ami te demande de l’argent via message.",
+    explanation: "Usurpation d’identité possible.",
     options: [
-      { label: "J’envoie l’argent", isCorrect: false },
-      { label: "Je vérifie par un autre moyen", isCorrect: true },
-      { label: "Je clique sur le lien", isCorrect: false }
+      { label: "J’envoie", isCorrect: false },
+      { label: "Je vérifie autrement", isCorrect: true },
+      { label: "Je clique", isCorrect: false }
     ]
   },
   {
     category: "SOCIAL",
-    prompt: "Lien suspect envoyé via Messenger.",
-    explanation: "Les comptes peuvent être compromis.",
+    prompt: "Lien suspect envoyé par un contact.",
+    explanation: "Le compte peut être piraté.",
     options: [
       { label: "Je clique", isCorrect: false },
       { label: "Je demande confirmation", isCorrect: true },
@@ -139,12 +189,12 @@ const QUESTIONS = [
   },
   {
     category: "SOCIAL",
-    prompt: "Profil avec peu d’amis et des photos volées.",
+    prompt: "Profil récent avec peu d’amis.",
     explanation: "Souvent un faux compte.",
     options: [
       { label: "Je fais confiance", isCorrect: false },
-      { label: "Je reste méfiant", isCorrect: true },
-      { label: "Je clique sur les liens", isCorrect: false }
+      { label: "Je me méfie", isCorrect: true },
+      { label: "Je clique", isCorrect: false }
     ]
   },
   {
@@ -160,27 +210,22 @@ const QUESTIONS = [
 ];
 
 async function main() {
+  await prisma.answer.deleteMany();
+  await prisma.option.deleteMany();
+  await prisma.question.deleteMany();
+
   for (const q of QUESTIONS) {
-    const exists = await prisma.question.findFirst({
-      where: { prompt: q.prompt }
-    });
-
-    if (exists) continue;
-
     await prisma.question.create({
       data: {
         category: q.category,
         prompt: q.prompt,
         explanation: q.explanation,
-        options: {
-          create: q.options
-        }
+        options: { create: q.options }
       }
     });
   }
 
-  const count = await prisma.question.count();
-  console.log(`✅ Seed terminé : ${count} questions en base`);
+  console.log(`✅ Seed terminé : ${QUESTIONS.length} questions en base`);
 }
 
 main()
