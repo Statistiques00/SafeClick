@@ -24,7 +24,7 @@ try {
 }
 
 # 2) Installer dépendances
-Write-Host "`n[1/6] Installation des dependances..."
+Write-Host "`n[1/7] Installation des dependances..."
 pnpm install
 
 # 3) Postgres Docker
@@ -34,7 +34,7 @@ $pgPass = "pass"
 $pgDb   = "mon_site"
 $pgPort = 5432
 
-Write-Host "`n[2/6] Verification du container Postgres..."
+Write-Host "`n[2/7] Verification du container Postgres..."
 $exists = (docker ps -a --format "{{.Names}}" | Select-String -SimpleMatch $containerName) -ne $null
 if (-not $exists) {
   Write-Host "Container inexistant -> creation..."
@@ -55,7 +55,7 @@ if (-not $exists) {
 }
 
 # 4) Créer .env si absent
-Write-Host "`n[3/6] Verification du fichier .env..."
+Write-Host "`n[3/7] Verification du fichier .env..."
 if (-not (Test-Path ".\.env")) {
   Write-Host "Aucun .env trouve -> creation d'un .env par defaut..."
   $secret = [Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Maximum 256 }))
@@ -69,13 +69,16 @@ NEXTAUTH_SECRET="$secret"
 }
 
 # 5) Prisma generate + migrate
-Write-Host "`n[4/6] Prisma generate..."
+Write-Host "`n[4/7] Prisma generate..."
 pnpm exec prisma generate
 
-Write-Host "`n[5/6] Prisma migrate..."
+Write-Host "`n[5/7] Prisma migrate..."
 pnpm exec prisma migrate dev --name init
 
+Write-Host "`n[6/7] Seed de la base de donnees..."
+node scripts/seed.js
+
 # 6) Run dev
-Write-Host "`n[6/6] Lancement du serveur..."
+Write-Host "`n[7/7] Lancement du serveur..."
 Write-Host "Ouvre ensuite http://localhost:3000"
 pnpm dev

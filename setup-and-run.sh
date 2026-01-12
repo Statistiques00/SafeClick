@@ -31,4 +31,5 @@ fi
 
 pnpm exec prisma generate
 pnpm exec prisma migrate dev --name init
+node scripts/seed.js
 pnpm dev
